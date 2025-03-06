@@ -1,4 +1,6 @@
 import loginSchema from './models/login.model.js';
+import userSchema from './models/user.model.js';  // Adjust path as needed
+import addressSchema from './models/address.model.js';
 import bcrypt from "bcrypt";
 import pkg from "jsonwebtoken";
 import nodemailer from "nodemailer";

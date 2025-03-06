@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 const Navbar = ({ username, role, loggedIn, setLoggedIn }) => {
   const navigate = useNavigate();
-  const [isSeller, setIsSeller] = useState(false);
+ 
   const [isPopoverVisible, setIsPopoverVisible] = useState(false);
 
   useEffect(() => {
@@ -15,7 +15,6 @@ const Navbar = ({ username, role, loggedIn, setLoggedIn }) => {
 
   const handleLogout = () => {
     localStorage.removeItem('Auth');
-    setIsSeller(false);
     setIsPopoverVisible(false);
     setLoggedIn(!loggedIn);
     navigate('/');
@@ -51,11 +50,6 @@ const Navbar = ({ username, role, loggedIn, setLoggedIn }) => {
               </div>
             )}
           </div>
-          {isSeller && (
-            <Link to={'/company'}>
-              <button className="bg-yellow-500 text-white px-4 py-2 rounded-lg shadow hover:bg-yellow-600">Seller</button>
-            </Link>
-          )}
           <Link to={'/cart'}>
             <FaShoppingCart className="text-white text-2xl cursor-pointer "/>
           </Link>

@@ -30,6 +30,7 @@ const Profile = ({setUsername,setRole,setLoggedIn}) => {
         setUsername(data.username);
         setRole(data.role);
         setLoggedIn(true);
+        
         if(data.profile)
           setProfile({...data.profile});
         if(data.address)
@@ -133,7 +134,7 @@ const Profile = ({setUsername,setRole,setLoggedIn}) => {
     <div className="profile-container">
       {/* Profile Section */}
       {/* Profile Section */}
-      <div className="flex justify-between grid grid-cols-3 gap-x-8 gap-y-4 mt-8 ml-40">
+      <div className="flex justify-between grid grid-cols-3 gap-x-12 gap-y-4 mt-8 ml-48">
       <div className="max-w-2xl mx-auto bg-white shadow-2xl rounded-2xl pl-24  pr-24 pb-24 pt-16">
       <h1 className="text-2xl font-semibold text-gray-800 mb-4">Your Details</h1>
       <div className="flex items-center space-x-4 mb-6">
@@ -215,7 +216,7 @@ const Profile = ({setUsername,setRole,setLoggedIn}) => {
     </div>
 
       {/* Addresses Section */}
-      <div className="bg-white shadow-2xl rounded-2xl p-6 max-w-2xl mx-auto pl-40 pr-40 pb-40 pt-16">
+      <div className="bg-white shadow-2xl rounded-2xl p-6 max-w-3xl mx-auto pl-40 pr-40 pb-40 pt-16">
       <div className="flex justify-between items-center mb-4 border-b pb-2">
         <h3 className="text-xl font-semibold">Addresses</h3>
         <button
@@ -225,6 +226,9 @@ const Profile = ({setUsername,setRole,setLoggedIn}) => {
         >
           +
         </button>
+         <Link to={'/company'}>
+                      <button className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600">Add Plot</button>
+                    </Link>
       </div>
 
       {isEditingAddresses && (
@@ -286,10 +290,10 @@ const Profile = ({setUsername,setRole,setLoggedIn}) => {
         </div>
       )}
 
-      <div className="mt-4 space-y-4">
+      <div className="mt-2 space-y-4">
         {addresses.map((address, index) =>
           address.houseName ? (
-            <div key={index} className="p-4 border rounded-lg shadow-md relative">
+            <div key={index} className="p-12 border rounded-lg shadow-md relative">
               <div className="flex justify-between items-center">
                 <h2 className="text-lg font-semibold">{address.houseName}</h2>
                 <FaEllipsisH
