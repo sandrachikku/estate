@@ -7,6 +7,7 @@ import EmailVerificationSuccess from './Components/verifysuccess/EmailVerificati
 import Home from './Components/home/Home';
 import Navbar from './Components/nav/Navbar';
 import Profile from './Components/profile/Profile';
+import Company from './Components/company/Company';
 import './App.css'
 
 const App = () => {
@@ -23,6 +24,7 @@ const App = () => {
         <Route path='/emailsuccess' Component={EmailVerificationSuccess}/>
         <Route path='/home' element={<Home  setUsername={setUsername} setRole={setRole} setLoggedIn={setLoggedIn}/>}/>
         <Route path='/profile' element={<Profile  setUsername={setUsername} setRole={setRole} setLoggedIn={setLoggedIn}/>}/>
+        <Route path='/company' element={<Company  setUsername={setUsername} setRole={setRole} setLoggedIn={setLoggedIn}/>}/>
       </Routes>
     </BrowserRouter>
   )

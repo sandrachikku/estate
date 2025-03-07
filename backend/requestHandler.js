@@ -1,6 +1,9 @@
 import loginSchema from './models/login.model.js';
 import userSchema from './models/user.model.js';  // Adjust path as needed
 import addressSchema from './models/address.model.js';
+import companySchema from './models/Company.model.js';
+import productSchema from './models/product.model.js';
+import categorySchema from './models/category.model.js';
 import bcrypt from "bcrypt";
 import pkg from "jsonwebtoken";
 import nodemailer from "nodemailer";
@@ -69,6 +72,56 @@ export async function editAddress(req,res) {
         const data=await addressSchema.create({userId:id,addresses:address});
     }
     return res.status(201).send({msg:"updated"});
+    } catch (error) {
+        return res.status(404).send({msg:"error"})
+    }
+}
+export async function company(req,res) {
+    try {
+        const _id=req.user.userId;
+        const user=await loginSchema.findOne({_id});
+        if(!user)
+            return res.status(403).send({msg:"Unauthorized acces"});
+        const company=await companySchema.findOne({sellerId:_id});
+        const categories=await categorySchema.find();
+        return res.status(200).send({username:user.username,role:user.role,company,categories})
+        
+    } catch (error) {
+        return res.status(404).send({msg:"error"})
+    }
+}
+
+export async function editCompany(req,res) {
+    try {
+    const {...company}=req.body;
+    const id=req.user.userId
+    const check=await companySchema.findOne({sellerId:id})
+    if(check){
+        const data=await companySchema.updateOne({sellerId:id},{$set:{...company}});
+    }else{
+        const data=await companySchema.create({sellerId:id,...company});
+    }
+    return res.status(201).send({msg:"updated"});
+    } catch (error) {
+        return res.status(404).send({msg:"error"})
+    }
+}
+export async function editCategory(req,res) {
+    try {
+    const {newCategory}=req.body;
+    const data=await categorySchema.create({category:newCategory});
+    return res.status(201).send({msg:"updated"});
+    } catch (error) {
+        return res.status(404).send({msg:"error"})
+    }
+}
+
+export async function addProduct(req,res) {
+    try {
+        const product=req.body;
+        const id=req.user.userId;
+        const data=await productSchema.create({sellerId:id,...product});
+        return res.status(201).send({msg:"Adding complete"});
     } catch (error) {
         return res.status(404).send({msg:"error"})
     }
