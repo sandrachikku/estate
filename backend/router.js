@@ -15,5 +15,9 @@ router.route("/company").get(Auth,user.company);
 router.route("/editcompany").post(Auth,user.editCompany);
 router.route("/editcategory").post(Auth,user.editCategory);
 router.route("/addproduct").post(Auth,user.addProduct);
+router.route("/products/:category").get(Auth,user.products);
+router.route("/getproduct/:_id").get(Auth,user.getProduct);
+router.route("/editproduct/:_id").put(Auth,user.editProduct);
+router.route("/product/:_id").get(Auth,user.product);
 
 export default router;

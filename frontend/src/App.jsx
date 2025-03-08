@@ -8,6 +8,10 @@ import Home from './Components/home/Home';
 import Navbar from './Components/nav/Navbar';
 import Profile from './Components/profile/Profile';
 import Company from './Components/company/Company';
+import AddProduct from './Components/addproduct/addproduct';
+import Products from './Components/products/Products';
+import EditProduct from './Components/editproduct/Editproduct';
+import DProd from './Components/Dprod/DProd';
 import './App.css'
 
 const App = () => {
@@ -25,6 +29,10 @@ const App = () => {
         <Route path='/home' element={<Home  setUsername={setUsername} setRole={setRole} setLoggedIn={setLoggedIn}/>}/>
         <Route path='/profile' element={<Profile  setUsername={setUsername} setRole={setRole} setLoggedIn={setLoggedIn}/>}/>
         <Route path='/company' element={<Company  setUsername={setUsername} setRole={setRole} setLoggedIn={setLoggedIn}/>}/>
+        <Route path='/addproduct' element={<AddProduct  setUsername={setUsername} setRole={setRole} setLoggedIn={setLoggedIn}/>}/>
+        <Route path='/products/:category' element={<Products  setUsername={setUsername} setRole={setRole} setLoggedIn={setLoggedIn}/>}/>
+        <Route path='/editproduct/:_id' element={<EditProduct  setUsername={setUsername} setRole={setRole} setLoggedIn={setLoggedIn}/>}/>
+        <Route path='/product/:id' element={<DProd  setUsername={setUsername} setRole={setRole} setLoggedIn={setLoggedIn}/>}/>
       </Routes>
     </BrowserRouter>
   )

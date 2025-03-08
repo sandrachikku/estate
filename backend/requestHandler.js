@@ -19,12 +19,12 @@ const transporter = nodemailer.createTransport({
     try {
         const _id=req.user.userId;
         const user=await loginSchema.findOne({_id});
-       // const products=await productSchema.find({
-       //     sellerId: { $not: { $eq: _id} }
-       //   })
-       //   const categories=await categorySchema.find();
+       const products=await productSchema.find({
+        sellerId: { $not: { $eq: _id} }
+         })
+       const categories=await categorySchema.find();
           
-        return res.status(200).send({username:user.username,role:user.role});
+        return res.status(200).send({username:user.username,role:user.role,product,categories});
     } catch (error) {
         return res.status(404).send({msg:"error"})
     }
@@ -122,6 +122,70 @@ export async function addProduct(req,res) {
         const id=req.user.userId;
         const data=await productSchema.create({sellerId:id,...product});
         return res.status(201).send({msg:"Adding complete"});
+    } catch (error) {
+        return res.status(404).send({msg:"error"})
+    }
+}
+export async function products(req,res) {
+    try {
+        const {category}=req.params;
+        const _id=req.user.userId;
+        const user=await loginSchema.findOne({_id});
+        if(!user)
+            return res.status(403).send({msg:"Unauthorized acces"});
+        const products=await productSchema.find({$and:[{sellerId:_id},{category}]});
+        return res.status(200).send({username:user.username,role:user.role,products})
+        
+    } catch (error) {
+        return res.status(404).send({msg:"error"})
+    }
+}
+export async function getProduct(req,res) {
+    try {
+        const {_id}=req.params;
+        const id=req.user.userId;
+        const user=await loginSchema.findOne({_id:id});
+        if(!user)
+            return res.status(403).send({msg:"Unauthorized acces"});
+        const product=await productSchema.findOne({_id});
+        
+        const category=await categorySchema.find();
+        return res.status(200).send({username:user.username,role:user.role,product,category})
+    } catch (error) {
+        return res.status(404).send({msg:"error"})
+    }
+}
+
+export async function editProduct(req,res) {
+    try {
+        const {...product}=req.body;
+        const{_id}=req.params;
+        const id=req.user.userId;
+        const data=await productSchema.updateOne({_id},{...product});
+        return res.status(201).send({msg:"Updated"});
+    } catch (error) {
+        return res.status(404).send({msg:"error"})
+    }
+}
+
+export async function product(req,res) {
+    try {
+        const {_id}=req.params;
+        const id=req.user.userId;
+        let isOnCart=false;
+        let isOnWishlist=false;
+        const user=await loginSchema.findOne({_id:id});
+        if(!user)
+            return res.status(403).send({msg:"Unauthorized acces"});
+        const product=await productSchema.findOne({_id});
+        const check1=await cartSchema.findOne({$and:[{"product._id":_id},{buyerId:id}]});
+        const check2=await wishlistSchema.findOne({$and:[{productId:_id},{buyerId:id}] })
+        if(check1)
+            isOnCart=true;
+        if(check2)
+            isOnWishlist=true;
+        return res.status(200).send({username:user.username,role:user.role,product,isOnCart,isOnWishlist})
+        
     } catch (error) {
         return res.status(404).send({msg:"error"})
     }
