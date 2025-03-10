@@ -11,7 +11,7 @@ const EditProduct = ({ setUsername, setRole, setLoggedIn }) => {
   const [newCategory, setNewCategory] = useState('');
   const [categories, setCategories] = useState([]);
   const [product, setProduct] = useState({});
-  const [sizeColorQuantities, setSizeColorQuantities] = useState([]);
+ // const [sizeColorQuantities, setSizeColorQuantities] = useState([]);
   const [isAddCategory, setAddCategory] = useState(false);
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const EditProduct = ({ setUsername, setRole, setLoggedIn }) => {
         setLoggedIn(true);
         setProduct(data.product);
         if (data.category.length > 0) setCategories(data.category);
-        setSizeColorQuantities(data.product.sizeColorQuantities);
+        //setSizeColorQuantities(data.product.sizeColorQuantities);
       }
     } catch (error) {
       console.log("Error fetching product data");
@@ -57,12 +57,12 @@ const EditProduct = ({ setUsername, setRole, setLoggedIn }) => {
     }
   };
 
-  const handleSizeQuantityChange = (e, index) => {
-    const updatedSizeColorQuantities = [...sizeColorQuantities];
-    updatedSizeColorQuantities[index] = { ...updatedSizeColorQuantities[index], quantity: e.target.value };
-    setProduct({ ...product, sizeColorQuantities: updatedSizeColorQuantities });
-    setSizeColorQuantities(updatedSizeColorQuantities);
-  };
+ // const handleSizeQuantityChange = (e, index) => {
+ //   const updatedSizeColorQuantities = [...sizeColorQuantities];
+ //   updatedSizeColorQuantities[index] = { ...updatedSizeColorQuantities[index], quantity: e.target.value };
+ //   setProduct({ ...product, sizeColorQuantities: updatedSizeColorQuantities });
+ //   setSizeColorQuantities(updatedSizeColorQuantities);
+ // };
 
   const handleProductDetailChange = (e) => {
     const { name, value } = e.target;
@@ -93,40 +93,31 @@ const EditProduct = ({ setUsername, setRole, setLoggedIn }) => {
             <label className="block text-gray-700">Category</label>
             <div className="flex gap-2">
               <select className="border p-2 w-full" value={category} onChange={handleCategoryChange}>
-                <option value={product.category}>{product.category}</option>
+                <option value={product.category||""}>{product.category}</option>
                 {categories.map((cat, index) => (
-                  product.category !== cat.category && <option key={index} value={cat.category}>{cat.category}</option>
+                  product.category !== cat.category && <option key={index} value={cat.category||""}>{cat.category}</option>
                 ))}
               </select>
               <button type="button" className="bg-blue-500 text-white px-3 py-1 rounded" onClick={() => setAddCategory(!isAddCategory)}>+</button>
             </div>
             {isAddCategory && (
               <div className="flex mt-2 gap-2">
-                <input type="text" className="border p-2 w-full" value={newCategory} onChange={handleNewCategoryChange} placeholder="Add new category" />
+                <input type="text" className="border p-2 w-full" value={newCategory||""} onChange={handleNewCategoryChange} placeholder="Add new category" />
                 <button type="button" className="bg-green-500 text-white px-3 py-1 rounded" onClick={handleAddCategory}>Add</button>
               </div>
             )}
           </div>
           <div>
             <label className="block text-gray-700">Product Name</label>
-            <input type="text" name="pname" value={product.pname} onChange={handleProductDetailChange} className="border p-2 w-full" placeholder="Enter product name" />
+            <input type="text" name="pname" value={product.pname||""} onChange={handleProductDetailChange} className="border p-2 w-full" placeholder="Enter location" />
           </div>
           <div>
             <label className="block text-gray-700">Price</label>
-            <input type="number" name="price" value={product.price} onChange={handleProductDetailChange} className="border p-2 w-full" placeholder="Enter price" />
+            <input type="number" name="price" value={product.price ||""} onChange={handleProductDetailChange} className="border p-2 w-full" placeholder="Enter price" />
           </div>
           <div>
             <label className="block text-gray-700">Brand</label>
-            <input type="text" name="brand" value={product.brand} disabled className="border p-2 w-full bg-gray-100" />
-          </div>
-          <div>
-            <label className="block text-gray-700">Sizes/Colors & Quantities</label>
-            {sizeColorQuantities.map((sq, index) => (
-              <div key={index} className="flex gap-2 mt-2">
-                <span className="p-2 w-full border bg-gray-100">{sq.sizeOrColor}</span>
-                <input type="number" value={sq.quantity} onChange={(e) => handleSizeQuantityChange(e, index)} className="border p-2 w-full" placeholder="Quantity" />
-              </div>
-            ))}
+            <input type="text" name="brand" value={product.brand ||""} disabled className="border p-2 w-full bg-gray-100" />
           </div>
           <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded w-full">Update Product</button>
         </form>

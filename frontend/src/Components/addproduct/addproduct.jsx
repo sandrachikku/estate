@@ -13,13 +13,14 @@ const AddProduct = ({ setUsername, setRole, setLoggedIn }) => {
   const [brand, setBrand] = useState("");
   const [productDetails, setProductDetails] = useState({ pname: '', price: '', pimages: [] });
   const [isAddCategory, setAddCategory] = useState(false);
-  const [sizeColorQuantities, setSizeColorQuantities] = useState([]);
+  //const [sizeColorQuantities, setSizeColorQuantities] = useState([]);
 
   useEffect(() => { getEssentials(); }, []);
 
   const getEssentials = async () => {
     try {
       const { status, data } = await axios.get(`${route()}company`, { headers: { "Authorization": `Bearer ${value}` } });
+      console.log(data.categories);
       if (status === 200) {
         setUsername(data.username);
         setRole(data.role);
@@ -44,12 +45,24 @@ const AddProduct = ({ setUsername, setRole, setLoggedIn }) => {
       reader.onerror = error => reject(error);
     });
   };
-
+  const handleAddCategory = async () => {
+    if (newCategory.trim()) {
+      const { status, data } = await axios.post(`${route()}editcategory`, { newCategory }, { headers: { "Authorization": `Bearer ${value}` } });
+      if (status === 201) {
+        alert(data.msg);
+        setAddCategory(!isAddCategory);
+        getEssentials();
+      } else {
+        alert("error");
+      }
+      setNewCategory('');
+    }
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const { status, data } = await axios.post(`${route()}addproduct`, {
-        ...productDetails, brand, category, sizeColorQuantities
+        ...productDetails, brand, category
       }, { headers: { "Authorization": `Bearer ${value}` } });
       if (status === 201) {
         alert(data.msg);
@@ -79,7 +92,7 @@ const AddProduct = ({ setUsername, setRole, setLoggedIn }) => {
             {isAddCategory && (
               <div className="mt-2 flex gap-2">
                 <input type="text" className="w-full p-2 border rounded" value={newCategory} onChange={(e) => setNewCategory(e.target.value)} placeholder="New category" />
-                <button type="button" className="bg-green-500 text-white px-3 py-2 rounded" onClick={handleSubmit}>Add</button>
+                <button type="button" className="bg-green-500 text-white px-3 py-2 rounded" onClick={handleAddCategory}>Add</button>
               </div>
             )}
           </div>

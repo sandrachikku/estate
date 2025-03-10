@@ -1,9 +1,10 @@
-import loginSchema from './models/login.model.js';
+import loginSchema from './models/login.model.js'
 import userSchema from './models/user.model.js';  // Adjust path as needed
 import addressSchema from './models/address.model.js';
 import companySchema from './models/Company.model.js';
-import productSchema from './models/product.model.js';
+import productSchema from './models/product.model.js'
 import categorySchema from './models/category.model.js';
+import cartSchema from './models/cart.model.js'
 import bcrypt from "bcrypt";
 import pkg from "jsonwebtoken";
 import nodemailer from "nodemailer";
@@ -12,7 +13,7 @@ const transporter = nodemailer.createTransport({
     service:"gmail",
      auth: {
          user: "ad1821225@gmail.com", 
-         pass: "ubva aceg djxv mpts",
+         pass: "dpzc musd zcap rlyl",
      },
    });
    export async function home(req,res) {
@@ -24,7 +25,7 @@ const transporter = nodemailer.createTransport({
          })
        const categories=await categorySchema.find();
           
-        return res.status(200).send({username:user.username,role:user.role,product,categories});
+        return res.status(200).send({username:user.username,role:user.role,products,categories});
     } catch (error) {
         return res.status(404).send({msg:"error"})
     }
@@ -37,10 +38,10 @@ export async function profile(req,res) {
             return res.status(403).send({msg:"Unauthorized acces"});
         const profile=await userSchema.findOne({userId:_id});
         const address=await addressSchema.findOne({userId:_id},{addresses:1});
-       // const cart=await cartSchema.countDocuments({buyerId:_id})
-       // const wishlist=await wishlistSchema.countDocuments({buyerId:_id})
-       // const orders=await orderSchema.countDocuments({buyerId:_id})
-        return res.status(200).send({username:user.username,role:user.role,profile,address})
+        const cart=await cartSchema.countDocuments({buyerId:_id})
+       const wishlist=await wishlistSchema.countDocuments({buyerId:_id})
+       const orders=await orderSchema.countDocuments({buyerId:_id})
+        return res.status(200).send({username:user.username,role:user.role,profile,address,cart})
     } catch (error) {
         return res.status(404).send({msg:"error"})
     }
@@ -186,6 +187,30 @@ export async function product(req,res) {
             isOnWishlist=true;
         return res.status(200).send({username:user.username,role:user.role,product,isOnCart,isOnWishlist})
         
+    } catch (error) {
+        return res.status(404).send({msg:"error"})
+    }
+}
+export async function addToCart(req,res) {
+    try {
+        const cart=req.body;
+        const id=req.user.userId;
+        const data=await cartSchema.create({buyerId:id,...cart});
+        return res.status(201).send({msg:"Added to Cart"});
+    } catch (error) {
+        return res.status(404).send({msg:"error"})
+    }
+}
+
+export async function getCart(req,res) {
+    try {
+        const id=req.user.userId;
+        const user=await loginSchema.findOne({_id:id});
+        if(!user)
+            return res.status(403).send({msg:"Unauthorized acces"});
+        const cart=await cartSchema.find({buyerId:id});
+        const addresses=await addressSchema.findOne({userId:id},{addresses:1})
+        return res.status(200).send({username:user.username,role:user.role,cart,addresses})
     } catch (error) {
         return res.status(404).send({msg:"error"})
     }

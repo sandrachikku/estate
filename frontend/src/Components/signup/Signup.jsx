@@ -45,7 +45,7 @@ const Signup = () => {
       if(status===201){
         localStorage.removeItem('email');
         alert(data.msg);
-        navigate('/login')
+        navigate('/')
       }
       else{
         alert(data.msg)
@@ -100,12 +100,14 @@ const Signup = () => {
             <option value="seller">Seller</option>
           </select>
           
+         
           <button 
             type="submit" 
             className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition duration-200"
           >
             Sign Up
           </button>
+         
         </form>
         
         <div className="text-sm text-center text-gray-500 mt-4">

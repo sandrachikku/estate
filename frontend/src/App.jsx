@@ -12,6 +12,7 @@ import AddProduct from './Components/addproduct/addproduct';
 import Products from './Components/products/Products';
 import EditProduct from './Components/editproduct/Editproduct';
 import DProd from './Components/Dprod/DProd';
+import Cart from './Components/cart/Cart';
 import './App.css'
 
 const App = () => {
@@ -32,6 +33,8 @@ const App = () => {
         <Route path='/addproduct' element={<AddProduct  setUsername={setUsername} setRole={setRole} setLoggedIn={setLoggedIn}/>}/>
         <Route path='/products/:category' element={<Products  setUsername={setUsername} setRole={setRole} setLoggedIn={setLoggedIn}/>}/>
         <Route path='/editproduct/:_id' element={<EditProduct  setUsername={setUsername} setRole={setRole} setLoggedIn={setLoggedIn}/>}/>
+        <Route path='/product/:id' element={<DProd  setUsername={setUsername} setRole={setRole} setLoggedIn={setLoggedIn}/>}/>
+        <Route path='/cart' element={<Cart  setUsername={setUsername} setRole={setRole} setLoggedIn={setLoggedIn}/>}/>
         <Route path='/product/:id' element={<DProd  setUsername={setUsername} setRole={setRole} setLoggedIn={setLoggedIn}/>}/>
       </Routes>
     </BrowserRouter>
