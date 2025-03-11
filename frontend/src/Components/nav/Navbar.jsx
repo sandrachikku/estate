@@ -53,13 +53,9 @@ const Navbar = ({ username, role, loggedIn, setLoggedIn }) => {
               </div>
             )}
           </div>
-          {isSeller ? (
+          {isSeller && (
             <Link to={'/company'}>
               <button className="bg-white text-blue-600 font-medium px-4 py-2 rounded-md shadow hover:bg-gray-200">Seller</button>
-            </Link>
-          ) : (
-            <Link to={'/cart'}>
-              <button className="bg-white text-blue-600 font-medium px-4 py-2 rounded-md shadow hover:bg-gray-200">Booking</button>
             </Link>
           )}
         </div>

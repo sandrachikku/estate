@@ -8,7 +8,7 @@ const Cart = ({ setUsername, setRole, setLoggedIn }) => {
   const navigate = useNavigate();
   const value = localStorage.getItem('Auth');
   const [cartItems, setCartItems] = useState([]);
-  const [quantities, setQuantities] = useState([]);
+  //const [quantities, setQuantities] = useState([]);
   const [priceTotal, setPriceTotal] = useState(0);
   const [addresses, setAddresses] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState("");
@@ -31,7 +31,7 @@ const Cart = ({ setUsername, setRole, setLoggedIn }) => {
       setRole(data.role);
       setLoggedIn(true);
       setCartItems(data.cart);
-      setQuantities(data.cart.map(item => item.quantity));
+     // setQuantities(data.cart.map(item => item.quantity));
       setPriceTotal(data.cart.reduce((acc, item) => acc + (item.product.price * item.quantity), 0));
       setAddresses(data.addresses.addresses);
     }
@@ -58,7 +58,7 @@ const Cart = ({ setUsername, setRole, setLoggedIn }) => {
                     <p className="text-gray-600">${item.product.price}</p>
                   </div>
                 </div>
-                <div className="flex items-center space-x-2">
+               {/* <div className="flex items-center space-x-2">
                   <button onClick={() => handleQuantityChange(index, item._id, 'decrease')} className="p-2 bg-gray-200 rounded">
                     <FiMinus />
                   </button>
@@ -67,7 +67,7 @@ const Cart = ({ setUsername, setRole, setLoggedIn }) => {
                     <FiPlus />
                   </button>
                 </div>
-                <p className="font-semibold">${item.product.price * quantities[index]}</p>
+                <p className="font-semibold">${item.product.price * quantities[index]}</p>*/}
               </div>
             ))}
           </div>

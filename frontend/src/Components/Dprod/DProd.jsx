@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import route from '../route';
+
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { FaShoppingCart, FaCreditCard } from 'react-icons/fa';
+import { FaShoppingCart, FaCreditCard, FaStar } from 'react-icons/fa';
 
 const DProd = ({ setUsername, setRole, setLoggedIn }) => {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ const DProd = ({ setUsername, setRole, setLoggedIn }) => {
 
   useEffect(() => {
     fetchProduct();
-  }, [id]);
+  }, [id, value, setUsername, setRole, setLoggedIn]);
 
   const fetchProduct = async () => {
     if (!id) return;
@@ -29,6 +30,7 @@ const DProd = ({ setUsername, setRole, setLoggedIn }) => {
       const { status, data } = await axios.get(`${route()}product/${id}`, {
         headers: { Authorization: `Bearer ${value}` },
       });
+
       if (status === 200) {
         setUsername(data.username);
         setRole(data.role);
@@ -42,86 +44,168 @@ const DProd = ({ setUsername, setRole, setLoggedIn }) => {
     }
   };
 
-  const handleSize = (size, ind) => {
+  const handleSize = (size,ind) => {
     setSelectedSize(size);
     setCart({ sizeOrColor: size, index: ind, product: product, quantity: 1 });
   };
 
+  const handleAddToCart = async () => {
+    if (cart.sizeOrColor) {
+      const { status, data } = await axios.post(`${route()}addtocart`, cart, {
+        headers: { "Authorization": `Bearer ${value}` }
+      });
+      if (status === 201) {
+        alert(data.msg);
+        fetchProduct();
+      } else {
+        alert("Adding incomplete");
+      }
+    } else {
+      alert("Please select size");
+    }
+  };
+
+  const addToWishlist = async (id) => {
+    const { status, data } = await axios.post(`${route()}addtowishlist`, { id }, {
+      headers: { "Authorization": `Bearer ${value}` }
+    });
+    if (status === 201) {
+      alert("Wishlist added");
+      fetchProduct();
+    } else {
+      alert("Failed");
+    }
+  };
+
+  const removeFromWishlist = async (id) => {
+    const { status, data } = await axios.delete(`${route()}removefromwishlist`, {
+      data: { id },
+      headers: { "Authorization": `Bearer ${value}` }
+    });
+    if (status === 201) {
+      alert("Removed from wishlist");
+      fetchProduct();
+    } else {
+      alert("Failed");
+    }
+  };
+
+  const handleBuynow = async () => {
+    
+    if (cart.sizeOrColor) {
+      const { status, data } = await axios.post(`${route()}addtocart`, cart, {
+        headers: { "Authorization": `Bearer ${value}` }
+      });
+      if (status === 201) {
+        alert(data.msg);
+        navigate(`/scart/${product._id}`);
+      } else {
+        alert("Could not add to cart");
+      }
+    } else {
+      alert("Please select size");
+    }
+  };
+
   return (
-    <div className="container mx-auto p-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white shadow-lg rounded-lg p-6">
+    <div className="product-page">
+      <div className="product-container">
         {/* Product Images */}
-        <div>
-          {product.pimages && product.pimages.length > 0 ? (
-            <>
-              <img id='img' src={product.pimages[0]} alt="Main Product" className="w-full h-96 object-cover rounded-lg shadow" />
-              <div className="flex gap-2 mt-4">
-                {product.pimages.map((image, index) => (
-                  <img
-                    key={index}
-                    src={image}
-                    alt={`Product Image ${index + 1}`}
-                    onMouseOver={() => { document.getElementById("img").src = product.pimages[index]; }}
-                    className="w-20 h-20 object-cover rounded-lg cursor-pointer border hover:border-gray-400"
-                  />
-                ))}
-              </div>
-            </>
-          ) : (
-            <p className="text-gray-500">No images available</p>
-          )}
+        <div className="product-images">
+          <div className="image-gallery">
+            {product.pimages && product.pimages.length > 0 ? (
+              <>
+                <div className="main-image">
+                  <img id='img' src={product.pimages[0]} alt="Main Product" className="main-product-image" />
+                </div>
+                <div className="thumbnails">
+                  {product.pimages.map((image, index) => (
+                    <img
+                      key={index}
+                      src={image}
+                      alt={`Product Image ${index + 1}`}
+                      onMouseOver={() => { document.getElementById("img").src = product.pimages[index]; }}
+                      className="thumbnail"
+                    />
+                  ))}
+                </div>
+              </>
+            ) : (
+              <p>No images available</p>
+            )}
+          </div>
         </div>
 
         {/* Product Details */}
-        <div className="flex flex-col gap-4">
-          <h1 className="text-2xl font-bold">{product.pname}</h1>
-          <p className="text-gray-600 uppercase">Category: {product.category}</p>
-          <p className="text-lg font-semibold">Brand: {product.brand}</p>
-          <p className="text-xl font-bold text-green-600">${product.price?.toFixed(2)}</p>
-
-          {/* Size Options */}
-          <div>
-            <strong>Select Size:</strong>
-            <div className="flex gap-2 mt-2">
-              {product.sizeColorQuantities &&
-                product.sizeColorQuantities.map((sq, ind) => (
-                  <button
-                    key={ind}
-                    className={`px-4 py-2 border rounded-lg ${selectedSize === sq.sizeOrColor ? 'bg-blue-600 text-white' : 'bg-gray-200'} hover:bg-gray-300`}
-                    onClick={() => handleSize(sq.sizeOrColor, ind)}
-                    disabled={sq.quantity <= 0}
-                  >
-                    {sq.sizeOrColor}
-                  </button>
-                ))}
+        <div className="product-details">
+            <div className="product-title">
+              <h1>{product.pname}</h1>
             </div>
-          </div>
+            <div className="product-category">
+              <strong>{product.category?.toUpperCase()}</strong>
+            </div>
+            <div className="product-brand">
+              <strong>Brand:</strong> {product.brand}
+            </div>
+            <div className="product-price">
+              <strong>Price:</strong>
+              <span>${product.price?.toFixed(2)}</span>
+            </div>
 
-          {/* Buy Options */}
-          <div className="flex gap-4 mt-4">
-            {isOnCart ? (
-              <Link to={`/scart/${product._id}`}>
-                <button className="bg-blue-600 text-white px-6 py-3 rounded-lg flex items-center gap-2">
-                  <FaCreditCard /> Buy Now
+            {/* Size Options */}
+            <div className="size-options">
+              <strong>Select Size:</strong>
+              <div className="size-choices">
+                {product.sizeColorQuantities &&
+                  product.sizeColorQuantities.map((sq,ind) => (
+                    <button
+                      key={ind}
+                      className={`size-btn ${selectedSize === sq.sizeOrColor ? 'selected' : ''}`}
+                      onClick={() => handleSize(sq.sizeOrColor,ind)}
+                      disabled={sq.quantity <= 0}
+                    >
+
+                      {sq.sizeOrColor}
+                    </button>
+                  ))}
+              </div>
+            </div>
+
+            {/* Buy Options */}
+            <div className="buy-options">
+              {isOnCart ? (
+                <Link to={`/scart/${product._id}`}>
+                  <button className="buy-btn">
+                    <FaCreditCard className="icon" />
+                    Buy Now
+                  </button>
+                </Link>
+              ) : (
+                <button className="buy-btn" onClick={handleBuynow}>
+                  <FaCreditCard className="icon" />
+                  Buy Now
                 </button>
-              </Link>
-            ) : (
-              <button className="bg-blue-600 text-white px-6 py-3 rounded-lg flex items-center gap-2">
-                <FaCreditCard /> Buy Now
-              </button>
-            )}
-            {isOnCart ? (
-              <Link to={'/cart'}>
-                <button className="bg-green-600 text-white px-6 py-3 rounded-lg flex items-center gap-2">
-                  <FaShoppingCart /> Go to Cart
+              )}
+              {isOnCart ? (
+                <Link to={'/cart'}>
+                  <button className="cart-btn">
+                    <FaShoppingCart className="icon" />
+                    Go to Cart
+                  </button>
+                </Link>
+              ) : (
+                <button className="cart-btn" onClick={handleAddToCart}>
+                  <FaShoppingCart className="icon" />
+                  Add to Cart
                 </button>
-              </Link>
-            ) : (
-              <button className="bg-green-600 text-white px-6 py-3 rounded-lg flex items-center gap-2">
-                <FaShoppingCart /> Add to Cart
-              </button>
+              )}
+            </div>
+
+            {/* Wishlist */}
+            {!isOnCart && (isOnWishlist ?
+              <img src="/images/liked.png" alt="Wishlist" onClick={() => { removeFromWishlist(product._id) }} /> :
+              <img src="/images/wlist.png" alt="Wishlist" onClick={() => { addToWishlist(product._id) }} />
             )}
-          </div>
         </div>
       </div>
     </div>

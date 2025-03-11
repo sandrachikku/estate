@@ -13,6 +13,9 @@ import Products from './Components/products/Products';
 import EditProduct from './Components/editproduct/Editproduct';
 import DProd from './Components/Dprod/DProd';
 import Cart from './Components/cart/Cart';
+import Orders from './Components/orders/Orders';
+import Wishlist from './Components/Wishlist/Wishlist';
+import SCart from './Components/singlecart/SCart'
 import './App.css'
 
 const App = () => {
@@ -36,6 +39,9 @@ const App = () => {
         <Route path='/product/:id' element={<DProd  setUsername={setUsername} setRole={setRole} setLoggedIn={setLoggedIn}/>}/>
         <Route path='/cart' element={<Cart  setUsername={setUsername} setRole={setRole} setLoggedIn={setLoggedIn}/>}/>
         <Route path='/product/:id' element={<DProd  setUsername={setUsername} setRole={setRole} setLoggedIn={setLoggedIn}/>}/>
+        <Route path='/myorders' element={<Orders  setUsername={setUsername} setRole={setRole} setLoggedIn={setLoggedIn}/>}/>
+        <Route path='/mywishlist' element={<Wishlist  setUsername={setUsername} setRole={setRole} setLoggedIn={setLoggedIn}/>}/>
+        <Route path='/scart/:pid' element={<SCart  setUsername={setUsername} setRole={setRole} setLoggedIn={setLoggedIn}/>}/>
       </Routes>
     </BrowserRouter>
   )
