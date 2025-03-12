@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import route from '../route';
 import axios from 'axios';
-
 import { Link } from 'react-router-dom';
 
 const Wishlist = ({ setUsername, setRole, setLoggedIn }) => {
@@ -22,7 +21,7 @@ const Wishlist = ({ setUsername, setRole, setLoggedIn }) => {
           setUsername(res.data.username);
           setRole(res.data.role);
           setLoggedIn(true);
-          setProducts(res.data.products || []);  // Ensure products is always an array
+          setProducts(res.data.products || []);
         }
       }
     } catch (error) {
@@ -30,39 +29,35 @@ const Wishlist = ({ setUsername, setRole, setLoggedIn }) => {
     }
   };
 
-  // Helper function to ensure product has valid data
   const isValidProduct = (product) => {
     return product && product._id && product.pimages && product.pname;
   };
 
   return (
-    <div className="Wishlist">
-      <h1 className="wishlist-heading">Wishlist</h1>
-      <div className="products-container">
+    <div className="min-h-screen bg-gray-100 py-10 px-5">
+      <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">Wishlist</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {products && products.length > 0 ? (
           products.map((product) =>
             isValidProduct(product) ? (
-              <div key={product._id} className="product-card">
-                <Link to={`/product/${product._id}`}>
-                  {/* First content (image) */}
-                  <div className="first-content">
+              <div key={product._id} className="bg-white shadow-md rounded-lg overflow-hidden">
+                <Link to={`/product/${product._id}`} className="block">
+                  <div className="h-48 bg-gray-200 flex justify-center items-center">
                     <img
                       src={product.pimages[0]}
-                      alt={`Product Image`}
-                      className="product-image"
+                      alt="Product"
+                      className="w-full h-full object-cover"
                     />
                   </div>
-
-                  {/* Second content (name) */}
-                  <div className="second-content">
-                    <span className="product-name">{product.pname}</span>
+                  <div className="p-4">
+                    <span className="text-lg font-semibold text-gray-700">{product.pname}</span>
                   </div>
                 </Link>
               </div>
             ) : null
           )
         ) : (
-          <p>No products available</p>
+          <p className="text-center text-gray-500 text-lg col-span-full">No products available</p>
         )}
       </div>
     </div>

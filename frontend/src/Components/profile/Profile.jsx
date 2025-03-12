@@ -14,7 +14,7 @@ const Profile = ({setUsername,setRole,setLoggedIn}) => {
   const [phoneError, setPhoneError] = useState(""); // For phone number validation
   const [isProfileValid, setIsProfileValid] = useState(true); // To track overall profile validation
  // const [countCart,setCountCart]=useState(0);
- // const [countWishlist,setCountWishlist]=useState(0);
+    const [countWishlist,setCountWishlist]=useState(0);
  // const [countOrders,setCountOrders]=useState(0);
   const [showPopover, setShowPopover] = useState(null);
   const [position,setPosition]=useState(0)
@@ -226,6 +226,16 @@ const Profile = ({setUsername,setRole,setLoggedIn}) => {
         >
           +
         </button>
+        
+        <Link
+      to="/mywishlist"
+      className="relative flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 transition duration-300"
+    >
+       Wishlist
+      <span className="absolute -top-2 -right-2 bg-blue-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+        {countWishlist}
+      </span>
+    </Link>
       </div>
 
       {isEditingAddresses && (

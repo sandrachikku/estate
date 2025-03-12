@@ -11,6 +11,7 @@ import soldproductSchema from './models/soldproduct.js'
 import bcrypt from "bcrypt";
 import pkg from "jsonwebtoken";
 import nodemailer from "nodemailer";
+import soldproduct from './models/soldproduct.js';
 const {sign}=pkg;
 const transporter = nodemailer.createTransport({
     service:"gmail",
@@ -203,10 +204,14 @@ export async function product(req,res) {
 
 export async function addToCart(req,res) {
     try {
-        const cart=req.body;
+        const product=req.body;
         const id=req.user.userId;
-        const data=await cartSchema.create({buyerId:id,...cart});
-        return res.status(201).send({msg:"Added to Cart"});
+        const user=await userSchema.findOne({userId:id});
+        if(!user)
+        return res.status(201).send({msg:"user details not provided in profile"});
+        const seller=await soldproductSchema.create({buyerId:id,sellerId:product.sellerId,user,product})
+        const buyer=await orderSchema.create({buyerId:id,product})
+        return res.status(201).send({msg:"Product purchased"});
     } catch (error) {
         return res.status(404).send({msg:"error"})
     }
@@ -218,9 +223,9 @@ export async function getCart(req,res) {
         const user=await loginSchema.findOne({_id:id});
         if(!user)
             return res.status(403).send({msg:"Unauthorized acces"});
-        const cart=await cartSchema.find({buyerId:id});
+        const placeOrders=await soldproductSchema.find({sellerId:id});
         const addresses=await addressSchema.findOne({userId:id},{addresses:1})
-        return res.status(200).send({username:user.username,role:user.role,cart,addresses})
+        return res.status(200).send({username:user.username,role:user.role,placeOrders,addresses})
     } catch (error) {
         return res.status(404).send({msg:"error"})
     }

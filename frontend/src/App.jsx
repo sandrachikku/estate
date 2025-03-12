@@ -12,11 +12,13 @@ import AddProduct from './Components/addproduct/addproduct';
 import Products from './Components/products/Products';
 import EditProduct from './Components/editproduct/Editproduct';
 import DProd from './Components/Dprod/DProd';
-import Cart from './Components/cart/Cart';
+import PlaceOrders from './Components/placeorders/PlaceOrders';
 import Orders from './Components/orders/Orders';
 import Wishlist from './Components/Wishlist/Wishlist';
-import SCart from './Components/singlecart/SCart'
+import SCart from './Components/singlecart/SCart';
+import PurchaseCompleted from './Components/purchase/PurchaseCompleted';
 import './App.css'
+
 
 const App = () => {
   const [username,setUsername]=useState("");
@@ -37,11 +39,12 @@ const App = () => {
         <Route path='/products/:category' element={<Products  setUsername={setUsername} setRole={setRole} setLoggedIn={setLoggedIn}/>}/>
         <Route path='/editproduct/:_id' element={<EditProduct  setUsername={setUsername} setRole={setRole} setLoggedIn={setLoggedIn}/>}/>
         <Route path='/product/:id' element={<DProd  setUsername={setUsername} setRole={setRole} setLoggedIn={setLoggedIn}/>}/>
-        <Route path='/cart' element={<Cart  setUsername={setUsername} setRole={setRole} setLoggedIn={setLoggedIn}/>}/>
+        <Route path='/placeorders' element={<PlaceOrders setUsername={setUsername} setRole={setRole} setLoggedIn={setLoggedIn}/>}/>
         <Route path='/product/:id' element={<DProd  setUsername={setUsername} setRole={setRole} setLoggedIn={setLoggedIn}/>}/>
         <Route path='/myorders' element={<Orders  setUsername={setUsername} setRole={setRole} setLoggedIn={setLoggedIn}/>}/>
         <Route path='/mywishlist' element={<Wishlist  setUsername={setUsername} setRole={setRole} setLoggedIn={setLoggedIn}/>}/>
         <Route path='/scart/:pid' element={<SCart  setUsername={setUsername} setRole={setRole} setLoggedIn={setLoggedIn}/>}/>
+        <Route path='/purchasecompleted' Component={PurchaseCompleted}/>
       </Routes>
     </BrowserRouter>
   )

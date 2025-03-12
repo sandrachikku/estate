@@ -5,7 +5,7 @@ import axios from 'axios';
 
 import { FiMinus, FiPlus } from 'react-icons/fi';
 
-const Cart = ({ setUsername, setRole, setLoggedIn }) => {
+const SCart = ({ setUsername, setRole, setLoggedIn }) => {
   const navigate = useNavigate();
   const value = localStorage.getItem('Auth');
   const [cartItems, setCartItems] = useState([]);
@@ -262,4 +262,4 @@ const Cart = ({ setUsername, setRole, setLoggedIn }) => {
   );
 };
 
-export default Cart;
+export default SCart;
